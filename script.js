@@ -1,0 +1,10 @@
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);const loader=$("#loader"),menu=$("#menu"),nav=$("#nav"),progress=$("#progress"),backTop=$("#backTop");
+window.addEventListener("load",()=>setTimeout(()=>loader?.classList.add("hide"),450));
+menu?.addEventListener("click",()=>{const open=nav.classList.toggle("open");menu.setAttribute("aria-expanded",String(open))});
+nav?.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{nav.classList.remove("open");menu.setAttribute("aria-expanded","false")}));
+function updateUI(){const max=document.documentElement.scrollHeight-innerHeight,pct=max>0?(scrollY/max)*100:0;if(progress)progress.style.width=Math.min(100,Math.max(0,pct))+"%";backTop?.classList.toggle("show",scrollY>650)}
+addEventListener("scroll",updateUI,{passive:true});updateUI();backTop?.addEventListener("click",()=>scrollTo({top:0,behavior:"smooth"}));
+const filterButtons=$$(".filters button"),cards=$$(".project");filterButtons.forEach(btn=>btn.addEventListener("click",()=>{filterButtons.forEach(b=>b.classList.remove("active"));btn.classList.add("active");const f=btn.dataset.filter;cards.forEach(card=>{const cats=(card.dataset.category||"").split(" ");card.classList.toggle("hidden",f!=="all"&&!cats.includes(f))})}));
+const revealObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");revealObserver.unobserve(e.target)}}),{threshold:.1});$$(".reveal").forEach(el=>revealObserver.observe(el));
+const links=[...$$("nav a")],sections=links.map(a=>document.querySelector(a.getAttribute("href"))).filter(Boolean);const activeObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-35% 0px -55% 0px"});sections.forEach(s=>activeObserver.observe(s));
+const year=$("#year");if(year)year.textContent=new Date().getFullYear();
