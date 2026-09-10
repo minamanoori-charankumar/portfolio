@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://minamanoori-charankumar.vercel.app/sitemap.xml
